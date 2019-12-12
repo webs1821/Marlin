@@ -24,88 +24,99 @@
 /**
  * Arduino Mega with RAMPS v1.4 for Anycubic
  */
+#if !defined(__AVR_ATmega1280__) && !defined(__AVR_ATmega2560__)
+  #error "Oops!  Make sure you have 'Arduino Mega' selected from the 'Tools -> Boards' menu."
+#endif
 
-#define BOARD_INFO_NAME "Anycubic RAMPS 1.4"
+#ifndef BOARD_NAME
+  #define BOARD_NAME "Anycubic RAMPS 1.4"
+#endif
 
 //
 // Servos
 //
-#if MB(TRIGORILLA_14_11)
-  #define SERVO0_PIN        5
-  #define SERVO1_PIN        4
-  #define SERVO2_PIN       11
-  #define SERVO3_PIN        6
-#endif
-
-// Labeled pins
-#define TRIGORILLA_HEATER_BED_PIN  8
-#define TRIGORILLA_HEATER_0_PIN   10
-#define TRIGORILLA_HEATER_1_PIN   45   // Anycubic Kossel: Unused
-
-#define TRIGORILLA_FAN0_PIN        9   // Anycubic Kossel: Usually the part cooling fan
-#define TRIGORILLA_FAN1_PIN        7   // Anycubic Kossel: Unused
-#define TRIGORILLA_FAN2_PIN       44   // Anycubic Kossel: Hotend fan
-
-// Remap MOSFET pins to common usages:
-
-#define RAMPS_D10_PIN    TRIGORILLA_HEATER_0_PIN // HEATER_0_PIN is always RAMPS_D10_PIN in pins_RAMPS.h
-
-#if HOTENDS > 1   // EEF and EEB
-  #define RAMPS_D9_PIN   TRIGORILLA_HEATER_1_PIN
-  #if !TEMP_SENSOR_BED
-    // EEF
-    #define RAMPS_D8_PIN TRIGORILLA_FAN0_PIN
-  #else
-    // EEB
-    #define RAMPS_D8_PIN TRIGORILLA_HEATER_BED_PIN
-    #define FAN_PIN      TRIGORILLA_FAN0_PIN    // Override pin 4 in pins_RAMPS.h
-  #endif
-#elif TEMP_SENSOR_BED
-  // EFB (Anycubic Kossel default)
-  #define RAMPS_D9_PIN   TRIGORILLA_FAN0_PIN
-  #define RAMPS_D8_PIN   TRIGORILLA_HEATER_BED_PIN
-#else
-  // EFF
-  #define RAMPS_D9_PIN   TRIGORILLA_FAN1_PIN
-  #define RAMPS_D8_PIN   TRIGORILLA_FAN0_PIN
-#endif
-
-#if HOTENDS > 1 || TEMP_SENSOR_BED      // EEF, EEB, EFB
-  #define FAN1_PIN       TRIGORILLA_FAN1_PIN
-#endif
-#define FAN2_PIN         TRIGORILLA_FAN2_PIN
-#define ORIG_E0_AUTO_FAN_PIN TRIGORILLA_FAN2_PIN  // Used in Anycubic Kossel example config
-
-#include "pins_RAMPS.h"
+#define SERVO0_PIN          11
+#define SERVO1_PIN          6
+#define SERVO2_PIN          5
+#define SERVO3_PIN          4
 
 //
-// AnyCubic made the following changes to 1.1.0-RC8
-// If these are appropriate for your LCD let us know.
+// Limit Switches
 //
-#if 0 && HAS_SPI_LCD
+#define X_MIN_PIN          3
+#define X_MAX_PIN          2
+#define Y_MIN_PIN          14
+#define Y_MAX_PIN          15
+#define Z_MIN_PIN          18
+#define Z_MAX_PIN          19
 
-  // LCD Display output pins
-  #if BOTH(NEWPANEL, PANEL_ONE)
-    #undef LCD_PINS_D6
-    #define LCD_PINS_D6    57
-  #endif
+//
+// Steppers
+//
+#define X_STEP_PIN         54
+#define X_DIR_PIN          55
+#define X_ENABLE_PIN       38
 
-  // LCD Display input pins
-  #if ENABLED(NEWPANEL)
-    #if ANY(VIKI2, miniVIKI)
-      #undef DOGLCD_A0
-      #define DOGLCD_A0    23
-    #elif ENABLED(ELB_FULL_GRAPHIC_CONTROLLER)
-      #undef BEEPER_PIN
-      #define BEEPER_PIN   33
-      #undef LCD_BACKLIGHT_PIN
-      #define LCD_BACKLIGHT_PIN 67
-    #endif
-  #elif ENABLED(MINIPANEL)
-    #undef BEEPER_PIN
-    #define BEEPER_PIN     33
-    #undef DOGLCD_A0
-    #define DOGLCD_A0      42
-  #endif
+#define Y_STEP_PIN         60
+#define Y_DIR_PIN          61
+#define Y_ENABLE_PIN       56
 
-#endif // HAS_SPI_LCD
+#define Z_STEP_PIN         46
+#define Z_DIR_PIN          48
+#define Z_ENABLE_PIN       62
+
+#define E0_STEP_PIN        26
+#define E0_DIR_PIN         28
+#define E0_ENABLE_PIN      24
+
+#define E1_STEP_PIN        36
+#define E1_DIR_PIN         34
+#define E1_ENABLE_PIN      30
+
+//
+// Temperature Sensors
+//
+#define TEMP_0_PIN         13   // Analog Input
+#define TEMP_1_PIN         14   // Analog Input
+#define TEMP_2_PIN         15   // Analog Input
+#define TEMP_3_PIN         12   // Analog Input
+#define TEMP_BED_PIN       15   // Analog Input
+
+//
+// Heaters / Fans
+//
+#define HEATER_0_PIN       10
+#define HEATER_1_PIN       45
+#define HEATER_BED_PIN     8
+
+#define FAN_PIN            9   
+#define FAN1_PIN           7
+//#define FAN2_PIN           44
+
+//
+// Misc. Functions
+//
+#define PS_ON_PIN          12
+
+//
+// LCD Display input pins
+//
+//>EXP1
+#define BEEPER_PIN        37
+#define BTN_ENC           35
+#define LCD_PINS_ENABLE   17
+#define LCD_PINS_RS       16
+#define LCD_PINS_D4       23
+#define LCD_PINS_D5       25
+#define LCD_PINS_D6       27
+#define LCD_PINS_D7       29
+
+//>EXP2
+//MISO                    50
+//SCK                     52
+#define BTN_EN2           31
+#define SDSS              53
+#define BTN_EN1           33
+//MOSI                    51
+#define SD_DETECT_PIN     49
+#define KILL_PIN          41
